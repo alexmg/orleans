@@ -298,7 +298,8 @@ namespace Orleans.ServiceBus.Providers
                 logger.Info("Starting to read latest messages from EventHub partition {0}-{1} at offset {2}", partitionSettings.Hub.Path, partitionSettings.Partition, offset);
             }
 
-            PartitionReceiver receiver = client.CreateReceiver(partitionSettings.Hub.ConsumerGroup, partitionSettings.Partition, offset, offsetInclusive);
+            var eventPosition = EventPosition.FromOffset(offset, offsetInclusive);
+            PartitionReceiver receiver = client.CreateReceiver(partitionSettings.Hub.ConsumerGroup, partitionSettings.Partition, eventPosition);
 
             if (partitionSettings.ReceiverOptions.PrefetchCount.HasValue)
                 receiver.PrefetchCount = partitionSettings.ReceiverOptions.PrefetchCount.Value;
